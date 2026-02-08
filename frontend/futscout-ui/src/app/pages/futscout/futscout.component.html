@@ -1,0 +1,137 @@
+<div class="page">
+  <!-- Header -->
+  <header class="header">
+    <div>
+      <h1>FutScout</h1>
+      <p>Top 5 Leagues 2024/25 • Player Comparison</p>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <section class="controls">
+    <div class="control">
+      <label>League</label>
+      <select [(ngModel)]="league" (change)="onFiltersChanged()">
+        <option *ngFor="let l of leagues" [value]="l">{{ l }}</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Position</label>
+      <select [(ngModel)]="pos" (change)="onFiltersChanged()">
+        <option *ngFor="let p of positions" [value]="p">{{ p }}</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Min 90s</label>
+      <input
+        type="number"
+        [(ngModel)]="min90s"
+        min="0"
+        step="0.5"
+        (change)="onFiltersChanged()"
+      />
+    </div>
+
+    <div class="control">
+      <label>Player A</label>
+      <select [(ngModel)]="playerA" (change)="runCompare()">
+        <option *ngFor="let p of players" [value]="p.Player">
+          {{ p.Player }} — {{ p.Squad }}
+        </option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Player B</label>
+      <select [(ngModel)]="playerB" (change)="runCompare()">
+        <option *ngFor="let p of players" [value]="p.Player">
+          {{ p.Player }} — {{ p.Squad }}
+        </option>
+      </select>
+    </div>
+
+    <button class="btn" (click)="runCompare()" [disabled]="loading">
+      {{ loading ? "Comparing…" : "Compare" }}
+    </button>
+  </section>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <!-- Content -->
+  <section *ngIf="compareResult" class="content">
+    <!-- Player cards -->
+    <div class="cards">
+      <div class="card blue">
+        <div class="name">{{ compareResult.playerA.name }}</div>
+        <div class="meta">
+          {{ compareResult.playerA.squad }} • {{ compareResult.playerA.pos }}
+        </div>
+        <div class="score">
+          Overall: {{ compareResult.playerA.radar.overall }}
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="name">{{ compareResult.playerB.name }}</div>
+        <div class="meta">
+          {{ compareResult.playerB.squad }} • {{ compareResult.playerB.pos }}
+        </div>
+        <div class="score">
+          Overall: {{ compareResult.playerB.radar.overall }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Radar -->
+    <div class="radar">
+      <div class="radarTitle">Radar (percentiles)</div>
+      <div class="radarBox">
+        <app-radar-chart
+          [labels]="compareResult.playerA.radar.labels"
+          [aName]="compareResult.playerA.name"
+          [bName]="compareResult.playerB.name"
+          [aData]="compareResult.playerA.radar.percentiles"
+          [bData]="compareResult.playerB.radar.percentiles"
+        ></app-radar-chart>
+      </div>
+    </div>
+
+    <!-- Heatmaps -->
+    <div class="heatmaps">
+      <div class="heat">
+        <div class="heatTitle">
+          Positional Zones — {{ compareResult.playerA.name }}
+        </div>
+
+        <app-pitch-heatmap
+          [thirds]="[
+            compareResult.playerA.heatmap.matrix[0][0],
+            compareResult.playerA.heatmap.matrix[1][0],
+            compareResult.playerA.heatmap.matrix[2][0],
+          ]"
+          accent="blue"
+        ></app-pitch-heatmap>
+      </div>
+
+      <div class="heat">
+        <div class="heatTitle">
+          Positional Zones — {{ compareResult.playerB.name }}
+        </div>
+
+        <app-pitch-heatmap
+          [thirds]="[
+            compareResult.playerB.heatmap.matrix[0][0],
+            compareResult.playerB.heatmap.matrix[1][0],
+            compareResult.playerB.heatmap.matrix[2][0],
+          ]"
+          accent="red"
+        ></app-pitch-heatmap>
+      </div>
+    </div>
+  </section>
+</div>

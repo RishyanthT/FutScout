@@ -1,0 +1,97 @@
+.longPitch {
+  position: relative;
+  height: 450px;
+  width: 320px;                 /* narrower pitch */
+  margin: 0 auto;               /* center horizontally */
+  border-radius: 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+/* Zones */
+.zone {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+/* Heat blob stays UNDER the lines */
+.blob {
+  position: absolute;
+  height: 70%;
+  border-radius: 999px;
+  z-index: 1;                    /* key: behind lines */
+  pointer-events: none;
+}
+
+/* Percentage on top */
+.pct {
+  position: relative;
+  z-index: 4;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: rgba(229,231,235,0.95);
+  text-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+/* Labels */
+.label {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  z-index: 4;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(229,231,235,0.45);
+}
+
+/* Center circle - above blob */
+.center-circle {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.22);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Pitch lines overlay (FORCE them visible + on top) */
+.pitch-border,
+.halfway,
+.box {
+  position: absolute;
+  z-index: 3;                    /* above blob, below text */
+  pointer-events: none;
+}
+
+/* Outer pitch border */
+.pitch-border {
+  inset: 10px;
+  border: 2px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+}
+
+/* Halfway line */
+.halfway {
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: rgba(255,255,255,0.16);
+}
+
+/* Penalty boxes */
+.box {
+  left: 30%;
+  right: 30%;
+  height: 9%;
+  border: 2px solid rgba(255,255,255,0.16);
+}
+
+.box.top { top: 10px; }
+.box.bottom { bottom: 10px; }
